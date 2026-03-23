@@ -139,7 +139,7 @@ function buildResultsText(states) {
     text += "\n" + group.provider + ":\n";
     for (const s of group.entries) {
       const st = states[s.ip];
-      text += (st === "ok" ? "+" : "-") + " " + s.city + " (" + s.ip + ")\n";
+      text += (st === "ok" ? "OK " : "BLOCKED ") + s.city + " (" + s.ip + ")\n";
     }
   }
   return text;
