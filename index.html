@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Проверка доступности серверов</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, system-ui, sans-serif; background: #1a1a2e; color: #eee; padding: 16px; min-height: 100vh; }
+h1 { font-size: 20px; text-align: center; margin-bottom: 4px; }
+.subtitle { text-align: center; color: #888; font-size: 13px; margin-bottom: 16px; }
+.provider { margin-bottom: 14px; }
+.provider-name { font-size: 14px; font-weight: 600; color: #7c83ff; margin-bottom: 6px; padding-left: 4px; }
+.row { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; background: #16213e; border-radius: 8px; margin-bottom: 4px; }
+.city { font-size: 14px; }
+.ip { font-size: 11px; color: #666; }
+.status { font-size: 20px; min-width: 28px; text-align: center; }
+.spin { animation: spin 1s linear infinite; display: inline-block; font-size: 16px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.btn { display: block; width: 100%; padding: 14px; margin: 16px 0; background: #7c83ff; color: #fff; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; }
+.btn:disabled { background: #444; }
+.summary { text-align: center; color: #888; font-size: 13px; margin-top: 8px; }
+</style>
+</head>
+<body>
+<h1>Проверка доступности серверов</h1>
+<p class="subtitle">Нажми кнопку и подожди 1-2 минуты</p>
+<button class="btn" id="startBtn" onclick="runTests()">Начать проверку</button>
+<div id="results"></div>
+<p class="summary" id="summary"></p>
+
+<script>
+const servers = [
+  { provider: "Vultr", entries: [
+    { city: "Stockholm", ip: "70.34.194.86" },
+    { city: "Warsaw", ip: "70.34.242.24" },
+    { city: "Frankfurt", ip: "108.61.210.117" },
+    { city: "Amsterdam", ip: "108.61.198.102" },
+    { city: "Paris", ip: "108.61.209.127" },
+    { city: "London", ip: "108.61.196.101" },
+    { city: "Manchester", ip: "64.176.178.136" },
+    { city: "Madrid", ip: "208.76.222.30" },
+    { city: "Tel Aviv", ip: "64.176.162.16" },
+    { city: "Delhi", ip: "139.84.162.104" },
+    { city: "Mumbai", ip: "65.20.66.100" },
+    { city: "Tokyo", ip: "108.61.201.151" },
+    { city: "Seoul", ip: "141.164.34.61" },
+    { city: "Singapore", ip: "45.32.100.168" },
+  ]},
+  { provider: "Hostinger", entries: [
+    { city: "Frankfurt", ip: "92.113.21.6" },
+    { city: "Paris", ip: "89.116.111.207" },
+    { city: "Vilnius", ip: "77.37.54.130" },
+    { city: "Amsterdam", ip: "89.116.152.131" },
+    { city: "Singapore", ip: "156.67.216.143" },
+    { city: "Mumbai", ip: "77.37.45.166" },
+  ]},
+  { provider: "Test", entries: [
+    { city: "Bogus (should fail)", ip: "192.0.2.1" },
+  ]},
+  { provider: "JustHost", entries: [
+    { city: "Stockholm", ip: "103.110.66.137" },
+    { city: "Helsinki", ip: "91.149.255.106" },
+    { city: "Warsaw", ip: "91.149.253.58" },
+    { city: "Amsterdam", ip: "91.149.241.62" },
+    { city: "Frankfurt", ip: "91.149.223.204" },
+    { city: "Paris", ip: "192.124.175.30" },
+    { city: "London", ip: "91.149.202.91" },
+    { city: "Istanbul", ip: "193.124.46.92" },
+  ]},
+];
+
+function render(states) {
+  let html = "";
+  for (const group of servers) {
+    html += `<div class="provider"><div class="provider-name">${group.provider}</div>`;
+    for (const s of group.entries) {
+      const key = s.ip;
+      const st = states[key];
+      let icon = "";
+      if (st === undefined) icon = "";
+      else if (st === "testing") icon = '<span class="spin">&#9696;</span>';
+      else if (st === "ok") icon = "&#9989;";
+      else icon = "&#10060;";
+      html += `<div class="row"><div><div class="city">${s.city}</div><div class="ip">${s.ip}</div></div><div class="status">${icon}</div></div>`;
+    }
+    html += "</div>";
+  }
+  document.getElementById("results").innerHTML = html;
+}
+
+function testIP(ip, timeout) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    const timer = setTimeout(() => { img.src = ""; resolve(false); }, timeout);
+    img.onload = img.onerror = () => { clearTimeout(timer); resolve(true); };
+    img.src = "http://" + ip + "/?t=" + Date.now();
+  });
+}
+
+async function runTests() {
+  const btn = document.getElementById("startBtn");
+  btn.disabled = true;
+  btn.textContent = "Проверяю...";
+  const states = {};
+  const allEntries = servers.flatMap(g => g.entries);
+
+  for (const s of allEntries) states[s.ip] = "testing";
+  render(states);
+
+  let ok = 0, fail = 0;
+  const promises = allEntries.map(async (s) => {
+    const result = await testIP(s.ip, 8000);
+    states[s.ip] = result ? "ok" : "fail";
+    if (result) ok++; else fail++;
+    render(states);
+  });
+
+  await Promise.all(promises);
+
+  document.getElementById("summary").textContent =
+    `Готово! Доступно: ${ok}, заблокировано: ${fail}. Сделай скриншот и отправь Максиму.`;
+  btn.textContent = "Готово";
+}
+
+render({});
+</script>
+</body>
+</html>
