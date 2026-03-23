@@ -20,6 +20,9 @@ h1 { font-size: 20px; text-align: center; margin-bottom: 4px; }
 .btn { display: block; width: 100%; padding: 14px; margin: 16px 0; background: #7c83ff; color: #fff; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; }
 .btn:disabled { background: #444; }
 .summary { text-align: center; color: #888; font-size: 13px; margin-top: 8px; }
+.copy-btn { display: none; width: 100%; padding: 14px; margin: 8px 0; background: #2d6a4f; color: #fff; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; }
+.copy-btn.show { display: block; }
+.copy-btn.copied { background: #444; }
 </style>
 </head>
 <body>
@@ -28,6 +31,7 @@ h1 { font-size: 20px; text-align: center; margin-bottom: 4px; }
 <button class="btn" id="startBtn" onclick="runTests()">Начать проверку</button>
 <div id="results"></div>
 <p class="summary" id="summary"></p>
+<button class="copy-btn" id="copyBtn" onclick="copyResults()">Скопировать результат</button>
 
 <script>
 const servers = [
@@ -113,14 +117,40 @@ async function runTests() {
     const result = await testIP(s.ip, 8000);
     states[s.ip] = result ? "ok" : "fail";
     if (result) ok++; else fail++;
+    lastStates = {...states};
     render(states);
   });
 
   await Promise.all(promises);
 
   document.getElementById("summary").textContent =
-    `Готово! Доступно: ${ok}, заблокировано: ${fail}. Сделай скриншот и отправь Максиму.`;
+    `Готово! Доступно: ${ok}, заблокировано: ${fail}.`;
   btn.textContent = "Готово";
+  document.getElementById("copyBtn").classList.add("show");
+}
+
+function buildResultsText(states) {
+  let text = "Результаты проверки:\n";
+  for (const group of servers) {
+    text += "\n" + group.provider + ":\n";
+    for (const s of group.entries) {
+      const st = states[s.ip];
+      text += (st === "ok" ? "+" : "-") + " " + s.city + " (" + s.ip + ")\n";
+    }
+  }
+  return text;
+}
+
+let lastStates = {};
+
+function copyResults() {
+  const text = buildResultsText(lastStates);
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById("copyBtn");
+    btn.textContent = "Скопировано!";
+    btn.classList.add("copied");
+    setTimeout(() => { btn.textContent = "Скопировать результат"; btn.classList.remove("copied"); }, 2000);
+  });
 }
 
 render({});
