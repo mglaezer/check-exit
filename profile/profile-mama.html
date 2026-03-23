@@ -10,9 +10,7 @@ body { font-family: -apple-system, system-ui, sans-serif; background: #fff; colo
 h1 { font-size: 22px; text-align: center; margin-bottom: 4px; }
 .date { text-align: center; color: #999; font-size: 12px; margin-bottom: 16px; }
 .profile { text-align: center; color: #4a5abb; font-size: 16px; font-weight: 600; margin-bottom: 16px; }
-.qr { text-align: center; margin-bottom: 16px; }
-.qr img { width: 220px; height: 220px; border-radius: 8px; }
-.link-box { background: #f3f4f6; border: 1px solid #ddd; border-radius: 8px; padding: 12px; margin-bottom: 12px; word-break: break-all; font-family: monospace; font-size: 11px; color: #555; user-select: all; }
+.link-box { background: #f3f4f6; border: 1px solid #ddd; border-radius: 8px; padding: 12px; margin-bottom: 12px; word-break: break-all; font-family: monospace; font-size: 9px; color: #555; user-select: all; max-height: 120px; overflow-y: auto; }
 .copy-btn { display: block; width: 100%; padding: 12px; background: #4a5abb; color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; margin-bottom: 20px; }
 .copy-btn.copied { background: #999; }
 h2 { font-size: 16px; color: #4a5abb; margin: 16px 0 8px; }
@@ -27,27 +25,22 @@ h2 { font-size: 16px; color: #4a5abb; margin: 16px 0 8px; }
 <p class="date">2026-03-23</p>
 <p class="profile">Профиль: mama</p>
 
-<div class="qr"><img src="data:image/png;base64,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" alt="QR"></div>
+<div style="background:#fff3cd;border:1px solid #e6c200;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:#664d03;text-align:center;"><b>Важно:</b> Ключ и приложение изменились! Удали старый профиль (Hiddify) и используй <b>Amnezia VPN</b>.</div>
 
-<div class="link-box" id="link">vless://ae1bb6c1-1bf9-4198-a978-bd7bf5d1e7c5@70.34.218.121:443?type=xhttp&security=reality&pbk=_g-HZBP3QzniLRqPWmP1HsRH6a65woKkOMNy5E4WjRI&fp=chrome&sni=jrstrafikskola.se&sid=16a0e132a971fdb5&spx=%2F&mode=auto&core=xray#mama-xhttp</div>
-<button class="copy-btn" id="copyBtn" onclick="copyLink()">Скопировать ссылку</button>
-<div style="background:#fff3cd;border:1px solid #e6c200;border-radius:8px;padding:10px 14px;margin-bottom:20px;font-size:13px;color:#664d03;text-align:center;"><b>Важно:</b> QR-код и ссылка работают только внутри приложений Hiddify, Streisand, v2rayNG и др. Не открывай их в браузере — они не будут работать.</div>
+<h2>Твой ключ</h2>
+<div class="link-box" id="link">vpn://AAALQXjatVZdb9owFH3vr0Bojy3EsZ2Pap1EC2pDR8uaAd2aCZnErBmQRHGAlqr_ff4IEFT3oZMWWvnmnGPfa_texy9HNf7UwzQpSJzQnNVPaw8SE8_LzpIqsv7N6UNQEleA43XLhoaDDRecAOg6Nn-FTv1YozaFGtgWNAwTI3gCHAwANiF0tXIo5CYA0AbYQODEBAibrgOhoZUjJUcWdBwHIyG3TWDbDtDJPRn657xmfvk8qRlPDnYM_oDyXz2W5VrQCq2pjS1kQG5PrcjY6ULDCKt9gIEJbxCKsANtaH_ROparoGXguwx6l8HvMd1QMEhLLciTILGhZ-NEbpSW9eW6uZaWk1NzTS2ndlPfT05Pu01zwooxz9JpLFKw_hIkAg545gX8PdDmXlA_3slMJdMmXVUHlU6bbVUd2uo0aVbReWV4_zm_qh7LmVYh-BZCbyH8BuqGCkJVjOeMQrFxAMdJucRV2C_n71pVsAzRNavgduUPlGWY1SUl83m6ptE4zpggHxSuOKMhf819CAo_PRWQQn7tRgrnMU0KL1I-2hR11uB-5rsGM9jFNzL4PpkB4LJNmt24yJ8PW63lajPp3hlnlXDUIDya7ewbTgM0rLeKLI9X4xl9VjoyWHk9ZF-6gD2TTsu_HnQ3l9nj90FGRpM_w645urdmXTv272cab9lysh_qXwOXxaSGePCSguZTEtJfQZC0oiinjNXOatvZNKHJ8faNz7FP_Tuv17r7Meavx7VPfufi9qZdvnNRn0-TFPSaPnPth2YZJN2Q90HC4Nkk3UubPHEbC9sH3OK5xC1TWCIqH3LLlBgSfbhxJWTaE4FzoqP-GOCkHEtb-5xEktQVfJB4wuX_rnLuRkQvWli2qGyxavnfQ5_SXGxjfzmZx6HaiKv-_e1k5Lft88GiOXn02rHXSdcxWfRsNsXO9GlTWC17NDofrs_kJlL2SHIaqd7ry7ZJ3Wb0PM8GqTPMfnbSIWj9nH7tbS567Pfiz9fz9Pzx8raJv4neLVWhXl-k0K4kj2uyCoOkk0RZGieF2AfkNiBsQKvhWKfQgZZYyj6_hcSs4Hl-TWlG5vGKioXHYnr79H1MWXFDFrQsu8pAFdGiWJY8tKt4tnPBy4hmY-mkPH9wVZfmhYBlaHuUzfbV96G12Y_MaL6i-WEhf2iT-Gn2GiS6T6UIWnwjZdBaQZ4WaZjOxyuxDKn8yGu_1Ww5SWgxJuo8UHcBeSBobwRFThImnI-lAyFfRln9QPh62G9_7xRqskjoJiYn_Jpp7ru9HqlTW11UIzoly3lx8W6_nY6FeZwV5fR8udw1sKMTJu8voCF_FVjdTWXS7uBtrkmqkmn1o9ejv4l6uAc</div>
+<button class="copy-btn" id="copyBtn" onclick="copyLink()">Скопировать ключ</button>
 
 <h2>1. Установи приложение</h2>
-<div class="step"><b>iPhone/iPad:</b> App Store → <b>Hiddify</b> (или Streisand / V2Box)</div>
-<div class="step"><b>Android:</b> Google Play → <b>Hiddify</b> (или v2rayNG)</div>
-<div class="step"><b>Windows:</b> github.com/hiddify/hiddify-app/releases → .exe</div>
-<div class="step"><b>Mac:</b> github.com/hiddify/hiddify-app/releases → .dmg</div>
+<div class="step"><b>iPhone/iPad:</b> App Store → <b>AmneziaVPN</b></div>
+<div class="step"><b>Android:</b> Google Play → <b>AmneziaVPN</b></div>
+<div class="step"><b>Windows / Mac:</b> github.com/amnezia-vpn/amnezia-client/releases</div>
 
-<h2>2. Добавь профиль</h2>
-<div class="step"><b>На телефоне:</b> Открой приложение → <b>+</b> → <b>Scan QR Code</b> → наведи камеру на QR выше</div>
-<div class="step"><b>На компьютере:</b> Удали старый профиль если есть → Скопируй ссылку выше → <b>+</b> → <b>Add From Clipboard</b></div>
+<h2>2. Добавь ключ</h2>
+<div class="step"><b>На телефоне:</b> Скопируй ключ выше → Открой AmneziaVPN → вставь в поле «Insert key»</div>
+<div class="step"><b>На компьютере:</b> Скопируй ключ выше → Открой AmneziaVPN → вставь в поле «Insert key» → нажми Insert</div>
 
-<h2>3. Настрой (только компьютер)</h2>
-<div class="step"><span class="warn">ОБЯЗАТЕЛЬНО:</span> Settings → Routing → Region → <b>Others</b></div>
-<div class="step"><span class="warn">ОБЯЗАТЕЛЬНО:</span> Settings → Inbound → Service Mode → <b>Set System Proxy</b></div>
-
-<h2>4. Подключись</h2>
+<h2>3. Подключись</h2>
 <div class="step">Нажми кнопку подключения → Разреши VPN если спросит → Готово!</div>
 <div class="step">Проверь: <b>2ip.ru</b> (обнови: Ctrl+Shift+R / Cmd+Shift+R)</div>
 
@@ -59,7 +52,7 @@ function copyLink() {
     const btn = document.getElementById('copyBtn');
     btn.textContent = 'Скопировано!';
     btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = 'Скопировать ссылку'; btn.classList.remove('copied'); }, 2000);
+    setTimeout(() => { btn.textContent = 'Скопировать ключ'; btn.classList.remove('copied'); }, 2000);
   });
 }
 </script>
