@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VPN — guest</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, system-ui, sans-serif; background: #1a1a2e; color: #eee; padding: 20px; min-height: 100vh; max-width: 600px; margin: 0 auto; }
+h1 { font-size: 22px; text-align: center; margin-bottom: 4px; }
+.date { text-align: center; color: #666; font-size: 12px; margin-bottom: 16px; }
+.profile { text-align: center; color: #7c83ff; font-size: 16px; font-weight: 600; margin-bottom: 16px; }
+.qr { text-align: center; margin-bottom: 16px; }
+.qr img { width: 220px; height: 220px; border-radius: 8px; }
+.link-box { background: #16213e; border-radius: 8px; padding: 12px; margin-bottom: 20px; word-break: break-all; font-family: monospace; font-size: 11px; color: #aaa; user-select: all; }
+.copy-btn { display: block; width: 100%; padding: 12px; background: #2d6a4f; color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; margin-bottom: 20px; }
+.copy-btn.copied { background: #444; }
+h2 { font-size: 16px; color: #7c83ff; margin: 16px 0 8px; }
+.step { background: #16213e; border-radius: 8px; padding: 10px 14px; margin-bottom: 6px; font-size: 14px; line-height: 1.5; }
+.step b { color: #fff; }
+.warn { color: #ff6b6b; font-weight: 600; }
+.footer { text-align: center; color: #666; font-size: 12px; margin-top: 24px; }
+</style>
+</head>
+<body>
+<h1>Как подключить VPN</h1>
+<p class="date">2026-03-23</p>
+<p class="profile">Профиль: guest</p>
+
+<div class="qr"><img src="data:image/png;base64,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" alt="QR"></div>
+
+<div class="link-box" id="link">vless://1a49ceb0-5efa-41f9-9db9-d9eca47e43c9@70.34.218.121:443?type=xhttp&security=reality&pbk=_g-HZBP3QzniLRqPWmP1HsRH6a65woKkOMNy5E4WjRI&fp=chrome&sni=jrstrafikskola.se&sid=16a0e132a971fdb5&spx=%2F&mode=auto&core=xray#guest-xhttp</div>
+<button class="copy-btn" id="copyBtn" onclick="copyLink()">Скопировать ссылку</button>
+
+<h2>1. Установи приложение</h2>
+<div class="step"><b>iPhone/iPad:</b> App Store → <b>Hiddify</b> (или Streisand / V2Box)</div>
+<div class="step"><b>Android:</b> Google Play → <b>Hiddify</b> (или v2rayNG)</div>
+<div class="step"><b>Windows:</b> github.com/hiddify/hiddify-app/releases → .exe</div>
+<div class="step"><b>Mac:</b> github.com/hiddify/hiddify-app/releases → .dmg</div>
+
+<h2>2. Добавь профиль</h2>
+<div class="step"><b>На телефоне:</b> Открой приложение → <b>+</b> → <b>Scan QR Code</b> → наведи камеру на QR выше</div>
+<div class="step"><b>На компьютере:</b> Удали старый профиль если есть → Скопируй ссылку выше → <b>+</b> → <b>Add From Clipboard</b></div>
+
+<h2>3. Настрой (только компьютер)</h2>
+<div class="step"><span class="warn">ОБЯЗАТЕЛЬНО:</span> Settings → Routing → Region → <b>Others</b></div>
+<div class="step"><span class="warn">ОБЯЗАТЕЛЬНО:</span> Settings → Inbound → Service Mode → <b>Set System Proxy</b></div>
+
+<h2>4. Подключись</h2>
+<div class="step">Нажми кнопку подключения → Разреши VPN если спросит → Готово!</div>
+<div class="step">Проверь: <b>2ip.ru</b> (обнови: Ctrl+Shift+R / Cmd+Shift+R)</div>
+
+<p class="footer">Проблемы? Напиши Максиму.</p>
+
+<script>
+function copyLink() {
+  navigator.clipboard.writeText(document.getElementById('link').textContent).then(() => {
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = 'Скопировано!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Скопировать ссылку'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+</script>
+</body>
+</html>
