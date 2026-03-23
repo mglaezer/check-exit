@@ -93,17 +93,22 @@ function render(states) {
   document.getElementById("results").innerHTML = html;
 }
 
-async function testIP(ip, timeout) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeout);
-  try {
-    await fetch("http://" + ip + "/?t=" + Date.now(), { mode: "no-cors", signal: controller.signal });
-    clearTimeout(timer);
-    return true;
-  } catch (e) {
-    clearTimeout(timer);
-    return false;
-  }
+function testIP(ip, timeout) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    let done = false;
+    const timer = setTimeout(() => { if (!done) { done = true; img.src = ""; resolve(false); } }, timeout);
+    img.onload = () => { if (!done) { done = true; clearTimeout(timer); resolve(true); } };
+    img.onerror = (e) => {
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      const elapsed = performance.now() - start;
+      resolve(elapsed < timeout - 500);
+    };
+    const start = performance.now();
+    img.src = "https://" + ip + ":443/?t=" + Date.now();
+  });
 }
 
 async function runTests() {
